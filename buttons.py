@@ -1,4 +1,4 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, InputFile
 
 
 # Close Keyboard
@@ -6,11 +6,11 @@ close_kb = ReplyKeyboardRemove()
 
 # Start Keyboard
 kb_main = ReplyKeyboardMarkup(resize_keyboard=True)
-b1 = KeyboardButton("📝 Існтрукція")
+b1 = KeyboardButton("📝 Інструкція")
 b2 = KeyboardButton("📜 Опис Боту")
 b3 = KeyboardButton("🎼 Завантажити пісню")
 b4 = KeyboardButton("🎥 Завантажити відео")
-kb_main.insert(b1).insert(b2).insert(b3).insert(b4)
+kb_main.insert(b1).insert(b2).add(b3).add(b4)
 
 
 # Keyboard for choosing resolution when user downloading video from YouTube
