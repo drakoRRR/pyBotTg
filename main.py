@@ -3,6 +3,7 @@ import os
 from io import BytesIO
 from aiogram import Bot, Dispatcher, types, executor
 from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from dotenv import load_dotenv
@@ -29,16 +30,17 @@ async def get_start(message: types.Message):
     return await message.answer(text=START_TEXT,
                                 reply_markup=kb_main)
 
-@dp.message_handler(lambda message: message.text == "📜 Опис Боту")
+
+@dp.message_handler(Text(equals="📜 Опис Боту"))
 async def get_descr(message: types.Message):
     await message.answer(text=DESCRIPTION_TEXT)
 
 
-@dp.message_handler(lambda message: message.text == "📝 Інструкція")
+@dp.message_handler(Text(equals="📝 Інструкція"))
 async def get_help(message: types.Message):
     await message.answer(text=TEXT_HELP)
 
-@dp.message_handler(lambda message: message.text == "🎼 Завантажити пісню")
+@dp.message_handler(Text(equals="🎼 Завантажити пісню"))
 async def get_audio(message: types.Message):
     await Form.WAITING_FOR_MUSIC_TEXT.set()
     await message.answer("📍 Надішліть посилання на YouTube відео з аудіо якe хочете завантажити",
@@ -77,7 +79,7 @@ async def process_text_audio(message: types.Message, state: FSMContext):
         except Exception as e:
             await message.reply(f"❌ Помилка завантаження: {e} ❌", reply_markup=kb_main)
 
-@dp.message_handler(lambda message: message.text == "🎥 Завантажити відео")
+@dp.message_handler(Text(equals="🎥 Завантажити відео"))
 async def start_download(message: types.Message):
     await Form.WAITING_FOR_TEXT.set()
     await message.answer("📍 Надішліть посилання на відео яке хочете завантажити"
