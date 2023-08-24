@@ -102,6 +102,8 @@ async def process_quality_choice(message: types.Message, state: FSMContext):
         url_youtube = data['url_video']
         user_choice = message.text
 
+        happend = False
+
         try:
             video = YouTube(url_youtube)
             if user_choice != "The best res":
@@ -109,7 +111,14 @@ async def process_quality_choice(message: types.Message, state: FSMContext):
             else:
                 stream = video.streams.get_highest_resolution()
             buffer = BytesIO()
-            stream.stream_to_buffer(buffer)
+
+            try:
+                stream.stream_to_buffer(buffer)
+            except Exception as Error:
+                await message.answer(text='❌ Данної якості не існує тому буде скачене найкраща можлива якість')
+                stream = video.streams.get_highest_resolution()
+                stream.stream_to_buffer(buffer)
+                happend = True
 
             start_message = await message.answer("⚒ Йде завантаження відео...")
             video_title = video.title
@@ -122,7 +131,10 @@ async def process_quality_choice(message: types.Message, state: FSMContext):
             await bot.delete_message(message.chat.id, start_message.message_id)
 
             await state.finish()
-            await message.reply("✅ Ваше відео у вибраній якості завантажено", reply_markup=kb_main)
+            if happend:
+                await message.reply("✅ Ваше відео у максимальній якості завантажено", reply_markup=kb_main)
+            else:
+                await message.reply("✅ Ваше відео у вибраній якості завантажено", reply_markup=kb_main)
         except Exception as e:
             await message.reply(f"❌ Помилка завантаження: {e} ❌", reply_markup=kb_main)
             await state.finish()
