@@ -2,9 +2,9 @@ from unittest.mock import AsyncMock
 import pytest
 
 from aiogram.dispatcher import FSMContext
-from buttons import kb_main, close_kb
-from main import get_start, get_descr, get_help, get_audio
-from texts_for_replys import START_TEXT, DESCRIPTION_TEXT, TEXT_HELP
+from pyBotTg.buttons import kb_main, close_kb
+from pyBotTg.main import get_start, get_descr, get_help, get_audio
+from pyBotTg.texts_for_replys import START_TEXT, DESCRIPTION_TEXT, TEXT_HELP
 
 
 @pytest.mark.asyncio
