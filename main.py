@@ -77,7 +77,7 @@ async def process_text_audio(message: types.Message, state: FSMContext):
             await bot.delete_message(message.chat.id, start_message.message_id)
 
         except Exception as e:
-            await message.reply(f"❌ Помилка завантаження: {e} ❌", reply_markup=kb_main)
+            await message.reply(f"❌ Помилка завантаження: ❌", reply_markup=kb_main)
 
 @dp.message_handler(Text(equals="🎥 Завантажити відео"))
 async def start_download(message: types.Message):
@@ -115,13 +115,16 @@ async def process_quality_choice(message: types.Message, state: FSMContext):
             try:
                 stream.stream_to_buffer(buffer)
             except Exception as Error:
-                await message.answer(text='❌ Данної якості не існує тому буде скачене найкраща можлива якість')
+                await message.answer(text='❌ Данної якості не існує або файл більше 50MB тому буде скачене найкраща можлива якість')
                 stream = video.streams.get_highest_resolution()
                 stream.stream_to_buffer(buffer)
                 happend = True
 
             start_message = await message.answer("⚒ Йде завантаження відео...")
             video_title = video.title
+
+            if happend:
+                user_choice = "The best res"
 
             buffer.seek(0)  # Сбрасываем позицию буфера в начало
             await bot.send_video(message.chat.id,
